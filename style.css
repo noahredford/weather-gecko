@@ -1,0 +1,10 @@
+var APIKey = 'e9eea6bd1c1b037e4823474be2a7422a'; //this is my API key for open weather map
+var citySelection = document.querySelector('#search-input').value
+
+
+
+var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + citySelection + "&appid=" + APIKey; //this is my actual query URL that sets the parameters after the base URL is stated
+
+fetch(queryURL)
+
+console.log(queryURL)
