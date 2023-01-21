@@ -1,8 +1,23 @@
 
 .h1 {
     color: white;
+    padding: 5px;
 }
 
 .search-label {
     color: white;
+    font-size: 3vh;
+}
+
+.search-input {
+    margin: 1vh;
+}
+
+.form-container {
+    background-color: blue;
+}
+
+.btn {
+    background-color: red;
+    margin: 2vh;
 }
