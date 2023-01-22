@@ -63,7 +63,7 @@ var currentWeatherSection = function(cityName) {
 
                     var currentTitle = $('#current-weather-title')
                     var currentDay = moment().format('M/D/YYYY');
-                    currentTitle.text('${cityName} (${currentDay})');
+                    currentTitle.text(${cityName} (${currentDay}));
 
                     
 
