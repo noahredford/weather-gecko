@@ -43,7 +43,7 @@ var loadUserHistory = function() {
 };
 
 var currentWeatherSection = function(cityName) {
-    fetch('https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}')
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${e9eea6bd1c1b037e4823474be2a7422a}')
         .then(function(response) {
             return response.json();
         })
@@ -51,38 +51,43 @@ var currentWeatherSection = function(cityName) {
             var cityLon = response.coord.lon;
             var cityLat = response.coord.lat;
 
-            fetch('https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}')
+            fetch('https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${e9eea6bd1c1b037e4823474be2a7422a}')
                 .then(function(response) {
                    return response.json();
                 })
                 .then(function(response){
-                    console.log(response);
+                    userSearchHistoryList(cityName);
 
-                    var futureWeatherTitle = $("#future-weather-title");
-                    futureWeatherTitle.text("5-Day Forecast");
+                    var currentWeatherSection = $('#current-container');
+                    currentWeatherSection.addClass('current-container');
 
-                    for (var i=1; i <= 5; i++) {
-                        var futureCard = $('.future-weather-card');
-                        futureCard.addClass("future-card-details");
+                    var currentTitle = $('#current-weather-title')
+                    var currentDay = moment().format('M/D/YYYY');
+                    currentTitle.text('${cityName} (${currentDay})');
 
-                        var futureDate = $("#new-date-" + i);
-                        date = moment().add(i, "d").format("M/D/YYYY");
-                        futureDate.text(date);
+                    
 
-                        var futureTemp = $('#new-temp-' + i);
-                        futureTemp.text("Temp:" + response.daily[i].temp.day + " \u00B0F");
-
-                        var futureHumidity = $("#new-humid-" + i);
-                        futureHumidity.text("Humidity: " + response.daily[i].humidity + "%")
-                    }
                 })
 
              
         })
-}
+};
 
+$('search-form').on('submit', function() {
+    event.preventDefault();
 
- console.log(currentWeatherSection)
+    var cityName = $('#search-input').val()
+
+    if (cityName === '' || cityName == null) {
+        alert('Please enter name of city!');
+        event.preventDefault();
+    }else {
+        currentWeatherSection(cityName);
+        
+    }
+})
+
+loadUserHistory();
 
 
 
