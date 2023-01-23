@@ -1,216 +1,216 @@
-// global variables
-var apiKey = "e9eea6bd1c1b037e4823474be2a7422a";
-var savedSearches = [];
 
-// make list of previously searched cities
-var searchHistoryList = function(cityName) {
-    $('.past-search:contains("' + cityName + '")').remove();
+var apiKey = "0af827efacf4924b7433953734648987"; // Used the following doc to get API Key https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys
+var usersSearches = []; // This array is created so we can store the users search history
 
-    // create entry with city name
-    var searchHistoryEntry = $("<p>");
-    searchHistoryEntry.addClass("past-search");
-    searchHistoryEntry.text(cityName);
+// This list will create the list of previous searched cities by the user
+var userPrevSearches = function(city) {
+    $('.past-search:contains("' + city + '")').remove();
 
-    // create container for entry
-    var searchEntryContainer = $("<div>");
-    searchEntryContainer.addClass("past-search-container");
+    // User Entry
+    var userEntry = $("<p>");
+    userEntry.addClass("past-search");
+    userEntry.text(city);
 
-    // append entry to container
-    searchEntryContainer.append(searchHistoryEntry);
+    // User Entry has somewhere to go (container)
+    var userEntryContainer = $("<div>");
+    userEntryContainer.addClass("past-city-container");
 
-    // append entry container to search history container
-    var searchHistoryContainerEl = $("#user-history-container");
-    searchHistoryContainerEl.append(searchEntryContainer);
+    // Add the user entry to the container
+    userEntryContainer.append(userEntry);
 
-    if (savedSearches.length > 0){
-        // update savedSearches array with previously saved searches
-        var previousSavedSearches = localStorage.getItem("savedSearches");
-        savedSearches = JSON.parse(previousSavedSearches);
+    // Add the container of the user entry to the search entry container as a whole
+    var userEntryContainerElement = $("#user-history-container");
+    userEntryContainerElement.append(userEntryContainer);
+
+    if (usersSearches.length > 0){
+        // Updates the list as needed
+        var previoususersSearches = localStorage.getItem("usersSearches");
+        usersSearches = JSON.parse(previoususersSearches);
     }
 
-    // add city name to array of saved searches
-    savedSearches.push(cityName);
-    localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
+    // This function saves the users searches to the array we set up as a global variable
+    usersSearches.push(city);
+    localStorage.setItem("usersSearches", JSON.stringify(usersSearches));
 
-    // reset search input
+    // This will reset the search input after the button is submitted
     $("#search-input").val("");
 
 };
 
 // load saved search history entries into search history container
-var loadSearchHistory = function() {
+var userHistoryLoaded = function() {
     // get saved search history
-    var savedSearchHistory = localStorage.getItem("savedSearches");
+    var userSearchHistorySaved = localStorage.getItem("usersSearches");
 
     // return false if there is no previous saved searches
-    if (!savedSearchHistory) {
+    if (!userSearchHistorySaved) {
         return false;
     }
 
     // turn saved search history string into array
-    savedSearchHistory = JSON.parse(savedSearchHistory);
+    userSearchHistorySaved = JSON.parse(userSearchHistorySaved);
 
-    // go through savedSearchHistory array and make entry for each item in the list
-    for (var i = 0; i < savedSearchHistory.length; i++) {
-        searchHistoryList(savedSearchHistory[i]);
+    // go through userSearchHistorySaved array and make entry for each item in the list
+    for (var i = 0; i < userSearchHistorySaved.length; i++) {
+        userPrevSearches(userSearchHistorySaved[i]);
     }
 };
 
-var currentWeatherSection = function(cityName) {
-    // get and use data from open weather current weather api end point
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
-        // get response and turn it into objects
+var nowSection = function(city) {
+    // Access API using API Key
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        // Receive data from API and parse them into objects
         .then(function(response) {
             return response.json();
         })
         .then(function(response) {
-            // get city's longitude and latitude
+            // Get the Long and Lat from the API 
             var cityLon = response.coord.lon;
             var cityLat = response.coord.lat;
 
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`)
-                // get response from one call api and turn it into objects
+            fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`)
+                
                 .then(function(response) {
                     return response.json();
                 })
-                // get data from response and apply them to the current weather section
+                // Apply the Data to the now section
                 .then(function(response){
-                    searchHistoryList(cityName);
+                    userPrevSearches(city);
 
-                    // add current weather container with border to page
-                    var currentWeatherContainer = $("#now-weather");
-                    currentWeatherContainer.addClass("now-weather");
+                    // Create a container for the now-weather section
+                    var nowContainer = $("#now-weather");
+                    nowContainer.addClass("now-weather");
 
-                    // add city name, date, and weather icon to current weather section title
-                    var currentTitle = $("#now-title");
-                    var currentDay = moment().format("M/D/YYYY");
-                    currentTitle.text(`${cityName} (${currentDay})`);
-                    var currentIcon = $("#now-icon");
-                    currentIcon.addClass("now-icon");
-                    var currentIconCode = response.current.weather[0].icon;
-                    currentIcon.attr("src", `https://openweathermap.org/img/wn/${currentIconCode}@2x.png`);
+                    // Add the parsed info into the container, so that the reaader can view it
+                    var nowTitle = $("#now-title");
+                    var today = moment().format("M/D/YYYY");
+                    nowTitle.text(`${city} (${today})`);
+                    var nowIcon = $("#now-icon");
+                    nowIcon.addClass("now-icon");
+                    var nowIconCode = response.current.weather[0].icon;
+                    nowIcon.attr("src", `http://openweathermap.org/img/wn/${nowIconCode}@2x.png`);
 
-                    // add current temperature to page
-                    var currentTemperature = $("#now-temp");
-                    currentTemperature.text("Temperature: " + response.current.temp + " \u00B0F");
+                    
+                    var nowTemperature = $("#now-temp");
+                    nowTemperature.text("Temperature: " + response.current.temp + " \u00B0F");
 
-                    // add current humidity to page
-                    var currentHumidity = $("#now-humid");
-                    currentHumidity.text("Humidity: " + response.current.humidity + "%");
+                    
+                    var nowHumidity = $("#now-humid");
+                    nowHumidity.text("Humidity: " + response.current.humidity + "%");
 
-                    // add current wind speed to page
-                    var currentWindSpeed = $("#now-wS");
-                    currentWindSpeed.text("Wind Speed: " + response.current.wind_speed + " MPH");
+                    
+                    var nowWindSpeed = $("#now-wS");
+                    nowWindSpeed.text("Wind Speed: " + response.current.wind_speed + " MPH");
 
-                    // add uv index to page
-                    var currentUvIndex = $("#now-uv");
-                    currentUvIndex.text("UV Index: ");
-                    var currentNumber = $("#current-number");
-                    currentNumber.text(response.current.uvi);
+                    
+                    var nowUVI = $("#now-uv");
+                    nowUVI.text("UV Index: ");
+                    var nowNumb = $("#current-number");
+                    nowNumb.text(response.current.uvi);
 
-                    // add appropriate background color to current uv index number
+                    // Add color, dependent on UVI 
                     if (response.current.uvi <= 2) {
-                        currentNumber.addClass("favorable");
+                        nowNumb.addClass("best");
                     } else if (response.current.uvi >= 3 && response.current.uvi <= 7) {
-                        currentNumber.addClass("moderate");
+                        nowNumb.addClass("better");
                     } else {
-                        currentNumber.addClass("severe");
+                        nowNumb.addClass("bad");
                     }
                 })
         })
         .catch(function(err) {
-            // reset search input
+            
             $("#search-input").val("");
 
-            // alert user that there was an error
-            alert("We could not find the city you searched for. Try searching for a valid city.");
+            // Tell user that the city cannot be found.
+            alert("We can't find that city, please try again!");
         });
 };
 
-var fiveDayForecastSection = function(cityName) {
-    // get and use data from open weather current weather api end point
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
-        // get response and turn it into objects
+var newForecast = function(city) {
+    
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        
         .then(function(response) {
             return response.json();
         })
         .then(function(response) {
-            // get city's longitude and latitude
+            
             var cityLon = response.coord.lon;
             var cityLat = response.coord.lat;
 
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`)
-                // get response from one call api and turn it into objects
+            fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`)
+                
                 .then(function(response) {
                     return response.json();
                 })
                 .then(function(response) {
                     console.log(response);
 
-                    // add 5 day forecast title
-                    var futureForecastTitle = $("#future-forecast-title");
-                    futureForecastTitle.text("5-Day Forecast:")
+                    // Add future weather forecast title
+                    var newWeatherTitle = $("#new-weather-title");
+                    newWeatherTitle.text("5-Day Upcoming Forecast:")
 
-                    // using data from response, set up each day of 5 day forecast
+                    
                     for (var i = 1; i <= 5; i++) {
-                        // add class to future cards to create card containers
-                        var futureCard = $(".future-card");
-                        futureCard.addClass("future-card-details");
+                        // Create card for new containers
+                        var newCard = $(".new-card");
+                        newCard.addClass("new-card-details");
 
-                        // add date to 5 day forecast
-                        var futureDate = $("#future-date-" + i);
+                        // Add the future date
+                        var newDate = $("#new-date-" + i);
                         date = moment().add(i, "d").format("M/D/YYYY");
-                        futureDate.text(date);
+                        newDate.text(date);
 
-                        // add icon to 5 day forecast
-                        var futureIcon = $("#future-icon-" + i);
-                        futureIcon.addClass("future-icon");
-                        var futureIconCode = response.daily[i].weather[0].icon;
-                        futureIcon.attr("src", `https://openweathermap.org/img/wn/${futureIconCode}@2x.png`);
+                        // Add the icon, dependent on the weather
+                        var newIcon = $("#future-icon-" + i);
+                        newIcon.addClass("future-icon");
+                        var newIconCode = response.daily[i].weather[0].icon;
+                        newIcon.attr("src", `http://openweathermap.org/img/wn/${newIconeCode}@2x.png`);
 
-                        // add temp to 5 day forecast
-                        var futureTemp = $("#future-temp-" + i);
-                        futureTemp.text("Temp: " + response.daily[i].temp.day + " \u00B0F");
+                        // Add new temp
+                        var newTemp = $("#new-temp-" + i);
+                        newTemp.text("Temp: " + response.daily[i].temp.day + " \u00B0F");
 
-                        // add humidity to 5 day forecast
-                        var futureHumidity = $("#future-humidity-" + i);
-                        futureHumidity.text("Humidity: " + response.daily[i].humidity + "%");
+                        // Add new humid
+                        var newHumid = $("#new-humid-" + i);
+                        newHumid.text("Humidity: " + response.daily[i].humidity + "%");
                     }
                 })
         })
 };
 
-// called when the search form is submitted
+// Function will be called when the submit button is selected
 $("#form").on("submit", function() {
     event.preventDefault();
     
-    // get name of city searched
-    var cityName = $("#search-input").val();
+    // Get the user's search input
+    var city = $("#search-input").val();
 
-    if (cityName === "" || cityName == null) {
-        //send alert if search input is empty when submitted
-        alert("Please enter name of city.");
+    if (city === "" || city == null) {
+        // If the card is empty, alert the user:
+        alert("Enter the name of a U.S. City");
         event.preventDefault();
     } else {
-        // if cityName is valid, add it to search history list and display its weather conditions
-        currentWeatherSection(cityName);
-        fiveDayForecastSection(cityName);
+        // If the input passes these checks, display the info for the user
+        nowSection(city);
+        newForecast(city);
     }
 });
 
-// called when a search history entry is clicked
+// This allows the user to use their search history
 $("#user-history-container").on("click", "p", function() {
-    // get text (city name) of entry and pass it as a parameter to display weather conditions
-    var previousCityName = $(this).text();
-    currentWeatherSection(previousCityName);
-    fiveDayForecastSection(previousCityName);
+    
+    var oldSearch = $(this).text();
+    nowSection(oldSearch);
+    newForecast(oldSearch);
 
     //
-    var previousCityClicked = $(this);
-    previousCityClicked.remove();
+    var oldSearchClicked = $(this);
+    oldSearchClicked.remove();
 });
 
-loadSearchHistory();
+userHistoryLoaded();
 
 console.log(localStorage)
 

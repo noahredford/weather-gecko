@@ -32,78 +32,85 @@
                             <div class="row m-0">
                                 <label for="search-input" class="user-search-label m-0">Search for a U.S. City:</label>
                             </div>
-                            <!---->
+                        
                             <div class="row m-0">
                                 <div class="col-sm-8 p-0 my-auto">
                                     <input type="text" id="search-input" name="search-input" class="search-input rounded">
                                 </div>
+                                <!--Search Button-->
                                 <div class="col-sm-4 p-0">
-                                    <button type="submit" class="btn rounded search-icon">Search</button>
+                                    <button type="submit" class="btn">Search!</button> <!--Used class of btn to style in css-->
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <!-- search history -->
+                    <!-- User Search History Container: We will use the add.class method in JS to add the user history -->
                     <div id="user-history-container" class="row m-0 user-history-container">
 
                     </div>
                 </div>
     
-                <!-- column 2 -->
+                <!-- Second Column: This will contain the current weather information. It will have be a block at the top of the screen.-->
                 <div class="col-sm-8 p-0">
-                    <!-- current weather conditions -->
+                    <!--Current Weather, titled now-weather-->
                     <div id="now-weather" class="row d-block">
-                        <!-- current weather title -->
+                        <!-- now weather title -->
                         <div class="now-title-container">
                             <h2 id="now-title" class="now-title d-inline"></h2>
                             <img id="now-icon" class="d-inline" src="" alt="">
                         </div>
-                        <!-- current weather temperature -->
+                        <!-- now temperature -->
                         <p class="now-temp" id="now-temp"></p>
-                        <!-- current weather humidity -->
+                        <!-- now humidity -->
                         <p class="now-humid" id="now-humid"></p>
-                        <!-- current weather wind speed -->
+                        <!-- now wind speed -->
                         <p class="now-wS" id="now-wS"></p>
-                        <!-- current weather uv index -->
+                        <!-- now uv index -->
                         <p class="now-uv-" id="now-uv"></p>
                         <p class="current-number rounded" id="current-number"></p>
                     </div>
-                    <!-- 5 day forecast -->
-                    <div class="row future-forecast-container d-block">
-                        <!-- 5 day forecast title-->
-                        <h2 class="future-forecast-title" id="future-forecast-title"></h2>
-                        <div id="forecasts-cards-container" class="forecasts-cards-container d-flex justify-content-between">
-                            <!-- future day forecard card -->
-                            <div class="future-card bg-primary rounded">
-                                <p class="future-date" id="future-date-1"></p>
+                    <!-- 5 Day Weather Future -->
+                    <div class="row new-weather-container d-block">
+                        <!-- 5 Day Future title-->
+                        <h2 class="new-weather-title" id="new-weather-title"></h2> <!--The title will be added in JS file, so that it is called when the submit button is selected.-->
+                        <div id="new-card-container" class="new-card-container d-flex justify-content-between">
+                            <!--5 Day Future Weather Cards, these will display the upcoming weather info. Using cards from src = https://getbootstrap.com/docs/4.0/components/card/ -->
+
+                            <card class="new-card"> <!--Day 1-->
+                                <p class="new-date" id="new-date-1"></p>
                                 <img id="future-icon-1" src="" alt="">
-                                <p class="future-temp" id="future-temp-1"></p>
-                                <p class="future-humidity" id="future-humidity-1"></p>
-                            </div>
-                            <div class="future-card bg-primary rounded">
-                                <p class="future-date" id="future-date-2"></p>
+                                <p class="new-temp" id="new-temp-1"></p>
+                                <p class="new-humid" id="new-humid-1"></p>
+                            </card>
+
+                            <card class="new-card"> <!--Day 2-->
+                                <p class="new-date" id="new-date-2"></p>
                                 <img id="future-icon-2" src="" alt="">
-                                <p class="future-temp" id="future-temp-2"></p>
-                                <p class="future-humidity" id="future-humidity-2"></p>
-                            </div>
-                            <div class="future-card bg-primary rounded">
-                                <p class="future-date" id="future-date-3"></p>
+                                <p class="new-temp" id="new-temp-2"></p>
+                                <p class="new-humid" id="new-humid-2"></p>
+                            </card>
+
+                            <card class="new-card"> <!--Day 3-->
+                                <p class="new-date" id="new-date-3"></p>
                                 <img id="future-icon-3" src="" alt="">
-                                <p class="future-temp" id="future-temp-3"></p>
-                                <p class="future-humidity" id="future-humidity-3"></p>
-                            </div>
-                            <div class="future-card bg-primary rounded">
-                                <p class="future-date" id="future-date-4"></p>
+                                <p class="new-temp" id="new-temp-3"></p>
+                                <p class="new-humid" id="new-humid-3"></p>
+                            </card>
+
+                            <card class="new-card"> <!--Day 4-->
+                                <p class="new-date" id="new-date-4"></p>
                                 <img id="future-icon-4" src="" alt="">
-                                <p class="future-temp" id="future-temp-4"></p>
-                                <p class="future-humidity" id="future-humidity-4"></p>
-                            </div>
-                            <div class="future-card bg-primary rounded">
-                                <p class="future-date" id="future-date-5"></p>
+                                <p class="new-temp" id="new-temp-4"></p>
+                                <p class="new-humid" id="new-humid-4"></p>
+                            </card>
+
+                            <card class="new-card"> <!--Day 5-->
+                                <p class="new-date" id="new-date-5"></p>
                                 <img id="future-icon-5" src="" alt="">
-                                <p class="future-temp" id="future-temp-5"></p>
-                                <p class="future-humidity" id="future-humidity-5"></p>
-                            </div>
+                                <p class="new-temp" id="new-temp-5"></p>
+                                <p class="new-humid" id="new-humid-5"></p>
+                            </card>
+                            
                         </div>
                     </div>
                 </div>
@@ -112,7 +119,7 @@
     </main>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> <!--I chose to use moment.js rather than day.js. I am still unfamiliar with day.j and felt more comforatble using moment.js until I can learn and implement day.js at a later date.-->
     <script src="script.js"></script>
 </body>
 </html>

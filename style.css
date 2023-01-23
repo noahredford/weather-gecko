@@ -35,10 +35,11 @@
     padding: 0 15px;
 }
 
-.search-icon {
+.btn {
     padding: 10px 15px;
     margin: 1vh;
     background-color: #00DDFF;
+    border-radius: 15%;
 }
 
 .user-history-container {
@@ -103,32 +104,37 @@
     padding: 5px 10px;
 }
 
-.favorable {
+.best {
     background-color: green;
 }
 
-.moderate {
+.better {
     background-color: yellow;
 }
 
-.severe {
+.bad {
     background-color:red;
 }
 
-.future-forecast-container {
+.new-weather-container {
     margin: 5px 20px 0 20px;
 }
 
-.future-forecast-title {
+.new-weather-title {
     font-size: 27px;
 }
 
-.future-card-details {
+.new-card-details {
     width: 17%;
     padding: 7px 0 0 7px;
 }
 
-.future-date {
+.new-card {
+    background-color: #FF1D58;
+    border-radius: 5%;
+}
+
+.new-date {
     font-size: 23px;
 }
 
@@ -138,7 +144,7 @@
     margin: 0 0 0 15px;
 }
 
-.future-temp, .future-humidity {
+.new-temp, .new-humid {
     font-size: 17px;
     font-weight: 200;
 }
