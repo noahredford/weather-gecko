@@ -2,41 +2,6 @@
 var apiKey = "0af827efacf4924b7433953734648987"; // Used the following doc to get API Key https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys
 var usersSearches = []; // This array is created so we can store the users search history
 
-// This list will create the list of previous searched cities by the user
-var userPrevSearches = function(city) {
-    $('.past-search:contains("' + city + '")').remove();
-
-    // User Entry
-    var userEntry = $("<p>");
-    userEntry.addClass("past-search");
-    userEntry.text(city);
-
-    // User Entry has somewhere to go (container)
-    var userEntryContainer = $("<div>");
-    userEntryContainer.addClass("past-city-container");
-
-    // Add the user entry to the container
-    userEntryContainer.append(userEntry);
-
-    // Add the container of the user entry to the search entry container as a whole
-    var userEntryContainerElement = $("#user-history-container");
-    userEntryContainerElement.append(userEntryContainer);
-
-    if (usersSearches.length > 0){
-        // Updates the list as needed
-        var previoususersSearches = localStorage.getItem("usersSearches");
-        usersSearches = JSON.parse(previoususersSearches);
-    }
-
-    // This function saves the users searches to the array we set up as a global variable
-    usersSearches.push(city);
-    localStorage.setItem("usersSearches", JSON.stringify(usersSearches));
-
-    // This will reset the search input after the button is submitted
-    $("#search-input").val("");
-
-};
-
 // load saved search history entries into search history container
 var userHistoryLoaded = function() {
     // get saved search history
@@ -127,6 +92,61 @@ var nowSection = function(city) {
         });
 };
 
+// This list will create the list of previous searched cities by the user
+var userPrevSearches = function(city) {
+    $('.past-search:contains("' + city + '")').remove();
+
+    // User Entry
+    var userEntry = $("<p>");
+    userEntry.addClass("past-search");
+    userEntry.text(city);
+
+    // User Entry has somewhere to go (container)
+    var userEntryContainer = $("<div>");
+    userEntryContainer.addClass("past-city-container");
+
+    // Add the user entry to the container
+    userEntryContainer.append(userEntry);
+
+    // Add the container of the user entry to the search entry container as a whole
+    var userEntryContainerElement = $("#user-history-container");
+    userEntryContainerElement.append(userEntryContainer);
+
+    if (usersSearches.length > 0){
+        // Updates the list as needed
+        var previoususersSearches = localStorage.getItem("usersSearches");
+        usersSearches = JSON.parse(previoususersSearches);
+    }
+
+    // This function saves the users searches to the array we set up as a global variable
+    usersSearches.push(city);
+    localStorage.setItem("usersSearches", JSON.stringify(usersSearches));
+
+    // This will reset the search input after the button is submitted
+    $("#search-input").val("");
+
+};
+
+
+
+// Function will be called when the submit button is selected
+$("#form").on("submit", function() {
+    event.preventDefault();
+    
+    // Get the user's search input
+    var city = $("#search-input").val();
+
+    if (city === "" || city == null) {
+        // If the card is empty, alert the user:
+        alert("Enter the name of a U.S. City");
+        event.preventDefault();
+    } else {
+        // If the input passes these checks, display the info for the user
+        nowSection(city);
+        newForecast(city);
+    }
+});
+
 var newForecast = function(city) {
     
     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
@@ -180,24 +200,6 @@ var newForecast = function(city) {
         })
 };
 
-// Function will be called when the submit button is selected
-$("#form").on("submit", function() {
-    event.preventDefault();
-    
-    // Get the user's search input
-    var city = $("#search-input").val();
-
-    if (city === "" || city == null) {
-        // If the card is empty, alert the user:
-        alert("Enter the name of a U.S. City");
-        event.preventDefault();
-    } else {
-        // If the input passes these checks, display the info for the user
-        nowSection(city);
-        newForecast(city);
-    }
-});
-
 // This allows the user to use their search history
 $("#user-history-container").on("click", "p", function() {
     
@@ -212,7 +214,6 @@ $("#user-history-container").on("click", "p", function() {
 
 userHistoryLoaded();
 
-console.log(localStorage)
 
 
 

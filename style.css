@@ -49,14 +49,14 @@
 
 .past-search {
     background-color: #0049B7;
-    border-width: thin;
+    border-width: bold;
     border-color: lightgrey;
     border-style: solid;
     border-radius: 3px;
     margin: 3px;
     text-align: left;
     width: 350px;
-    height: 45px;
+    height: 40px;
     line-height: 45px;
     padding: 0 20px;
     color: white;
@@ -101,7 +101,7 @@
     font-size: 20px;
     display: inline;
     color: white;
-    padding: 5px 10px;
+    padding: 10px 12px;
 }
 
 .best {
@@ -117,7 +117,7 @@
 }
 
 .new-weather-container {
-    margin: 5px 20px 0 20px;
+    margin: 5px 20px 20px;
 }
 
 .new-weather-title {
